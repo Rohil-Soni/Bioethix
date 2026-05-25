@@ -1,4 +1,20 @@
+# Security: Block sensitive files from indexing
 User-agent: *
+Disallow: /.git/
+Disallow: /.env
+Disallow: /.htaccess
+Disallow: /admin/
+Disallow: /config/
+Disallow: /private/
+
+# Allow search engines to crawl public content
 Allow: /
+
+# Security: Specify crawl delay to prevent DoS
+Crawl-delay: 1
+
+# Search engines crawl sitemap
+Sitemap: https://www.bioethix.com/sitemap.xml
+
 
 Sitemap: https://www.bioethix.com/sitemap.xml

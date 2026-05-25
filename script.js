@@ -1,4 +1,23 @@
+// Email obfuscation to prevent spam harvesting
+function protectEmail() {
+    const emailElements = document.querySelectorAll('[data-email]');
+    emailElements.forEach(el => {
+        const encoded = el.getAttribute('data-email');
+        const decoded = atob(encoded);
+        
+        if (el.tagName === 'A' && el.href.startsWith('mailto:')) {
+            el.href = 'mailto:' + decoded;
+            el.textContent = decoded;
+        } else {
+            el.textContent = decoded;
+        }
+    });
+}
+
 document.addEventListener('DOMContentLoaded', function () {
+    // Protect email addresses
+    protectEmail();
+    
     const toggleButton = document.querySelector('.nav-toggle');
     const nav = document.querySelector('.site-nav');
 
