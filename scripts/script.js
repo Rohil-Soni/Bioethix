@@ -152,6 +152,26 @@ function handleFormSubmit(event) {
     }, 800);
 }
 
+// Close menu on scroll
+let lastScrollTop = 0;
+function closeMenuOnScroll() {
+    const nav = document.querySelector('.site-nav');
+    const toggleButton = document.querySelector('.nav-toggle');
+    
+    if (window.innerWidth <= 1024 && nav && toggleButton) {
+        let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        
+        if (scrollTop > lastScrollTop && nav.classList.contains('open')) {
+            nav.classList.remove('open');
+            toggleButton.classList.remove('active');
+            toggleButton.setAttribute('aria-expanded', 'false');
+        }
+        lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
+    }
+}
+
+window.addEventListener('scroll', closeMenuOnScroll, false);
+
 document.addEventListener('DOMContentLoaded', function () {
     // Protect email addresses
     protectEmail();
@@ -160,7 +180,8 @@ document.addEventListener('DOMContentLoaded', function () {
     const nav = document.querySelector('.site-nav');
 
     if (toggleButton && nav) {
-        toggleButton.addEventListener('click', function () {
+        toggleButton.addEventListener('click', function (e) {
+            e.stopPropagation();
             const expanded = this.getAttribute('aria-expanded') === 'true';
             this.setAttribute('aria-expanded', String(!expanded));
             this.classList.toggle('active');
@@ -175,6 +196,17 @@ document.addEventListener('DOMContentLoaded', function () {
                     toggleButton.setAttribute('aria-expanded', 'false');
                 }
             });
+        });
+        
+        // Close menu when clicking outside
+        document.addEventListener('click', function (e) {
+            if (!nav.contains(e.target) && !toggleButton.contains(e.target)) {
+                if (nav.classList.contains('open')) {
+                    nav.classList.remove('open');
+                    toggleButton.classList.remove('active');
+                    toggleButton.setAttribute('aria-expanded', 'false');
+                }
+            }
         });
     }
 
